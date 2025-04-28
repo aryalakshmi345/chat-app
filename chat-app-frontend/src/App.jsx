@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import Navbar from './components/Navbar'
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import Homepage from './pages/Homepage'
 import Login from './pages/Login'
 import Profile from './pages/Profile'
@@ -19,7 +19,7 @@ function App() {
 
   console.log(authUer);
 
-  if(!isCheckingAuth && !authUer){
+  if(isCheckingAuth && !authUer){
     return (
       <div className='flex justify-center items-center h-screen'>
         <Loader className='size-10 animate-spin'/> 
@@ -34,11 +34,11 @@ function App() {
       <Navbar/>
 
       <Routes>
-        <Route path='/' element={<Homepage/>}/>
-        <Route path='/login' element={<Login/>}/>
-        <Route path='/profile' element={<Profile/>}/>
+        <Route path='/' element={authUer ?<Homepage/> : <Navigate to={'/login'}/>}/>
+        <Route path='/login' element={!authUer ?<Login/>: <Navigate to={'/'}/>}/>
+        <Route path='/profile' element={authUer ?<Profile/> : <Navigate to={'/login'}/>}/>
         <Route path='/settings' element={<Settings/>}/>
-        <Route path='/sign-up' element={<SignUp/>}/>
+        <Route path='/sign-up' element={!authUer ?<SignUp/> : <Navigate to={'/'}/>}/>
       </Routes>
      </div>
     </>
