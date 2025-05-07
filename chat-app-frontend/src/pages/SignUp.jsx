@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Eye, EyeOff, Loader2, Lock, Mail, MessageSquare, User } from "lucide-react";
 import { Link } from "react-router-dom";
+import  { toast } from 'react-hot-toast'
 
 
 function Signup () {
@@ -15,11 +16,24 @@ function Signup () {
   const {signup, isSigningUp} = useAuthStore()
 
   const validateForm = ()=>{
-
+    if(!formData.fullName.trim()) return toast.error('Full name is required')
+    if(!formData.email.trim()) return toast.error('Email is required')
+    if(!/\S+@\S+\.\S+/.test(formData.email)) return toast.error('Invalid email address')
+    if(!formData.password.trim()) return toast.error('Password is required')
+    if(formData.password.length < 6) return toast.error('Password must be atleast 6 characters')
+      return true
   }
 
-  const handleInput = (e)=>{
+  const handleSubmit = (e)=>{    
     e.preventDefault()
+
+    const success = validateForm()
+
+    if(success===true){
+      signup(formData)
+    }
+
+
   }
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
@@ -40,7 +54,7 @@ function Signup () {
             </div>
           </div>
 
-          <form  className="space-y-6">
+          <form  className="space-y-6" onSubmit={(e)=>handleSubmit(e)}>
             <div className="form-control">
               <label className="label">
                 <span className="label-text font-medium">Full Name</span>
@@ -130,8 +144,11 @@ function Signup () {
       </div>
 
       {/* right side */}
-
-      
+      <div className="flex flex-col justify-center items-center p-0 sm:p-12">
+      <MessageSquare className="size-10 text-primary" />
+      <h1 className="text-4xl mb-8">Welcome to  ChatApp!</h1>
+      <h2 className="text-2xl">Start a conversation and connect instantly</h2>
+      </div>
     </div>
   );
 };
