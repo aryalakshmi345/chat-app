@@ -14,7 +14,7 @@ const app = express()
 const port = 4000
 
 
-app.use(express.json())
+app.use(express.json({ limit: "50mb", extended: true, parameterLimit: 50000 }))
 app.use(cookieParser())
 app.use(cors({
     origin:'http://localhost:5173',
