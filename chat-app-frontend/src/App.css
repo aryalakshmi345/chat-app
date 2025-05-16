@@ -1,4 +1,2 @@
 @plugin "daisyui";
-@plugin "daisyui" {
-   themes: [light , dark]
- }
+@plugin "daisyui" 
