@@ -35,6 +35,8 @@ export const getMessages = async(req,res)=>{
 
 
 export const sendMessage = async(req,res)=>{
+    console.log("Inside fn");
+    
     try {
         const {text, image} = req.body
         const {id: recieverId } = req.params
@@ -45,6 +47,7 @@ export const sendMessage = async(req,res)=>{
             // upload image to cloudinary
             const uploadResponse = await cloudinary.uploader.upload(image)
             imageURL = uploadResponse.secure_url
+            }
 
             const newMessage = new Message({
                 senderId,
@@ -58,7 +61,9 @@ export const sendMessage = async(req,res)=>{
             // /todo : realtime functionality goes here (socket.io)
 
             res.status(201).send(newMessage)
-        }
+            
+            
+        
         
     } catch (error) {
         res.status(500).send("Internal Server Error")
