@@ -30,7 +30,6 @@ export const useAuthStore = create((set, get) => ({
   },
 
   signup: async (data) => {
-
     set({ isSigningUp: true });
 
     try {
@@ -78,6 +77,7 @@ export const useAuthStore = create((set, get) => ({
       await axiosInstance.post("/auth/logout");
       set({ authUser: null });
       toast.success("Logout successfully");
+      get().disconnectSocket();
     } catch (error) {
       toast.error(error.response.data.message);
     }
@@ -96,9 +96,9 @@ export const useAuthStore = create((set, get) => ({
 
     set({ socket: socket });
 
-    socket.on("getOnlineUsers", (userIds) => {
-      set({ onlineUsers: userIds });
-    });
+    socket.on("getOnlineUsers", (userIds)=>{
+      set({onlineUsers : userIds})
+    })
   },
   disconnectSocket: () => {
     if (get().socket?.connected) get().socket.disconnect();

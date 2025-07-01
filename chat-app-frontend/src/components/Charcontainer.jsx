@@ -8,12 +8,16 @@ import { useRef } from 'react'
 import { formatMessageTime } from '../lib/utils'
 
 function Charcontainer() {
-  const {messages, getMessages, selectedUser, isMessageLoading , authUser} = useChatStore()
+  const {messages, getMessages, selectedUser, isMessageLoading , authUser , subscribeToMessages , unsubscribeFromMessages} = useChatStore()
   const messageEndRef = useRef(null);
 
   useEffect(()=>{
     getMessages(selectedUser?._id)
-  },[selectedUser?._id,getMessages])
+
+    subscribeToMessages()
+
+    return ()=>unsubscribeFromMessages()
+  },[selectedUser?._id,getMessages, subscribeToMessages, unsubscribeFromMessages])
 
    useEffect(() => {
     if (messageEndRef.current && messages) {
